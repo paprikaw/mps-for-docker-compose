@@ -1,0 +1,44 @@
+version: "3.8"
+
+# This is a common settings for all services, you can add more settings here
+# Do no remove the settings in this section, these are critical for gpu and mps to work in container.
+x-common: &common_settings
+  image: your_own_image 
+  devices:
+    - "nvidia.com/gpu=all"
+  volumes:
+  cap_add:
+    - ALL
+  security_opt:
+    - label=disable
+  # To resolve resource unavailable issue:
+  # https://github.com/containers/podman/issues/17647 
+  pids_limit: -1 
+
+# Sample network setup, you can add more networks here
+networks:
+  my_network:
+    driver: bridge
+
+# In here, we define two containers,
+# Container 1 is allocated with 24 GB of gpu memory and 25% of gpu cores
+# Container 2 is allocated with 24 GB of gpu memory and 75% of gpu cores
+services:
+  container-1:
+    <<: *common_settings
+    ports:
+      - "8265:8265"
+      - "8000:8000"
+    networks:
+      - my_network
+    environment:
+      CUDA_MPS_ACTIVE_THREAD_PERCENTAGE: "25" 
+      CUDA_MPS_PINNED_DEVICE_MEM_LIMIT: "0=24GB"
+
+  container-2:
+    <<: *common_settings
+    networks:
+      - my_network
+    environment:
+      CUDA_MPS_ACTIVE_THREAD_PERCENTAGE: "75"
+      CUDA_MPS_PINNED_DEVICE_MEM_LIMIT: "0=24GB"

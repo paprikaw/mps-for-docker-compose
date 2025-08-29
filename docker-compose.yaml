@@ -3,8 +3,8 @@ services:
   mps-control-daemon:
     image: ubuntu:22.04
     container_name: mps-control-daemon
-    privileged: true                             # privileged mode :contentReference[oaicite:9]{index=9}
-    pid: "host"                                  # host PID namespace :contentReference[oaicite:10]{index=10}
+    privileged: true
+    pid: "host"
     entrypoint: 
       - chroot
       - /driver-root
