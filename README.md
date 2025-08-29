@@ -1,8 +1,10 @@
-# MPS Control Guide
+# MPS for Docker Compose
 
 This repository provides two Compose setups for:
 - Starting and managing the NVIDIA CUDA MPS control daemon (mps-control-daemon).
 - Running inference/compute containers that connect to that MPS (e.g., a vLLM cluster).
+
+Even though the name of this repository includes "docker compose", we only verify it on podman. It is recommended to run the docker compose file in this repository using podman and podman-compose.
 
 Typical workflow: start the MPS daemon first, then launch workload containers to enable GPU sharing and concurrency.
 
